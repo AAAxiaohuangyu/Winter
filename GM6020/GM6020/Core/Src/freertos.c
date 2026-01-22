@@ -119,7 +119,7 @@ void MX_FREERTOS_Init(void) {
 
   showGM6020dataHandle = osThreadNew(showGM6020data, NULL, &(osThreadAttr_t){
                                                        .name = "showGM6020data",
-                                                       .stack_size = 2048,
+                                                       .stack_size = 2500,
                                                        .priority = osPriorityNormal,
                                                    });
 

@@ -56,7 +56,7 @@ void showGM6020data(void*ptr)
         package[channel * 4 + 2] = 0x80;
         package[channel * 4 + 3] = 0x7f;
         HAL_UART_Transmit_DMA(&huart1, package, sizeof(package));
-        osDelay(30);
+        osDelay(40);
     }
 }
 

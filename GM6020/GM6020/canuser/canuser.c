@@ -11,8 +11,8 @@ void FDCAN_Filter_init(void)
     sfilter.FilterIndex = 0;
     sfilter.FilterType = FDCAN_FILTER_MASK;
     sfilter.FilterConfig = FDCAN_RX_FIFO0;
-    sfilter.FilterID1 = 0x0; // id
-    sfilter.FilterID2 = 0x0; // mask
+    sfilter.FilterID1 = 0x205; // id
+    sfilter.FilterID2 = 0xFF0; // mask
     HAL_FDCAN_ConfigFilter(&hfdcan1, &sfilter);
 
     memset(&sfilter, 0, sizeof(sfilter));

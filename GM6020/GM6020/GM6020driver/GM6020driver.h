@@ -13,6 +13,7 @@ typedef struct
 extern GM6020datatype GM6020[];
 extern int16_t GM6020current0[];
 extern int16_t GM6020current1[];
+extern int32_t turn;
 
 void GM6020_Current_Tx(uint16_t id, int16_t current[]);
 void GM6020_Rx(uint16_t id, uint8_t Rxbuff[]);

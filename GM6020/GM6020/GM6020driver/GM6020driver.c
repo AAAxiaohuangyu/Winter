@@ -3,6 +3,7 @@
 GM6020datatype GM6020[8];
 int16_t GM6020current0[4] = {0};
 int16_t GM6020current1[4] = {0};
+int32_t turn = 0;
 
 void GM6020_Current_Tx(uint16_t id, int16_t current[])
 {
@@ -32,7 +33,6 @@ void GM6020_Rx(uint16_t id, uint8_t Rxbuff[])
 {
     static uint16_t angle_raw = 0;
     static uint16_t angle_raw0 = 0;
-    static int32_t turn = 0;
     int16_t current_raw = 0;
     angle_raw0 = angle_raw;
     angle_raw = (Rxbuff[0] << 8) | Rxbuff[1];

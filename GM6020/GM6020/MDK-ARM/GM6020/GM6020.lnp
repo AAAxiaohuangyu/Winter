@@ -45,6 +45,7 @@
 "gm6020\gm6020driver.o"
 "gm6020\usartuser.o"
 "gm6020\pid.o"
+"gm6020\chassiscontrol.o"
 --strict --scatter "GM6020\GM6020.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

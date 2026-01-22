@@ -14,14 +14,14 @@ typedef struct{
     float error0;
     float error1;
     float error2;
+    float error_sum;
     float output;
-    float outputmax;
 }pidtype;
 
 extern pidtype speedpid[];
 extern pidtype locationpid[];
-extern int16_t location_pid_voltage_output0[];
-extern int16_t speed_pid_voltage_output0[4];
+extern int32_t location_pid_voltage_output0[];
+extern int32_t speed_pid_voltage_output0[];
 
 void PID_location(pidtype *piddata);
 void PID_speed(pidtype *piddate);
