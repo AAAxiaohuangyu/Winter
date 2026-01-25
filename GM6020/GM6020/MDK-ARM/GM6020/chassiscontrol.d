@@ -1,7 +1,7 @@
 gm6020\chassiscontrol.o: ..\ChassisControl\ChassisControl.c
 gm6020\chassiscontrol.o: ..\ChassisControl\ChassisControl.h
 gm6020\chassiscontrol.o: ../PID/pid.h
-gm6020\chassiscontrol.o: ../GM6020driver/GM6020driver.h
+gm6020\chassiscontrol.o: ../motordriver/motordriver.h
 gm6020\chassiscontrol.o: ../canuser/canuser.h
 gm6020\chassiscontrol.o: ../Core/Inc/fdcan.h
 gm6020\chassiscontrol.o: ../Core/Inc/main.h
@@ -42,4 +42,6 @@ gm6020\chassiscontrol.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 gm6020\chassiscontrol.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 gm6020\chassiscontrol.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 gm6020\chassiscontrol.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
+gm6020\chassiscontrol.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hcd.h
+gm6020\chassiscontrol.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 gm6020\chassiscontrol.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h

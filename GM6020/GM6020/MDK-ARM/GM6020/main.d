@@ -37,6 +37,8 @@ gm6020\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 gm6020\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 gm6020\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 gm6020\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
+gm6020\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hcd.h
+gm6020\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 gm6020\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h
 gm6020\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 gm6020\main.o: ../Core/Inc/FreeRTOSConfig.h
@@ -50,5 +52,7 @@ gm6020\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 gm6020\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 gm6020\main.o: ../Core/Inc/dma.h
 gm6020\main.o: ../Core/Inc/fdcan.h
+gm6020\main.o: ../Core/Inc/tim.h
 gm6020\main.o: ../Core/Inc/usart.h
+gm6020\main.o: ../USB_HOST/App/usb_host.h
 gm6020\main.o: ../Core/Inc/gpio.h

@@ -25,9 +25,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "GM6020driver.h"
+#include "ChassisControl.h"
 #include "usartuser.h"
-#include "pid.h"
+#include "tim.h"
+#include "dmimudriver.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,17 +48,19 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-osThreadId_t GM6020dataHandle;
+osThreadId_t motor_data_updateHandle;
 osThreadId_t commandHandle;
 osThreadId_t showGM6020dataHandle;
-osThreadId_t locationpidcontrolHandle;
-//osThreadId_t speedpidcontrolHandle;
+osThreadId_t chassis_status_updateHandle;
+osThreadId_t dmimu_updateHandle;
+
+extern USBH_HandleTypeDef hUsbHostHS;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
@@ -68,6 +71,7 @@ const osThreadAttr_t defaultTask_attributes = {
 
 void StartDefaultTask(void *argument);
 
+extern void MX_USB_HOST_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /**
@@ -80,8 +84,9 @@ void MX_FREERTOS_Init(void) {
   FDCAN_Filter_init();
   HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
   HAL_FDCAN_Start(&hfdcan1);
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, usartrxdatabuff, 64);
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, usart1rxdatabuff, 64);
   pidinit();
+  HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -105,35 +110,35 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  GM6020dataHandle = osThreadNew(GM6020data, NULL, &(osThreadAttr_t){
-                                           .name = "GM6020data",
-                                           .stack_size = 256,
-                                           .priority = osPriorityNormal,
-                                                        });
+  motor_data_updateHandle = osThreadNew(motor_data_update, NULL, &(osThreadAttr_t){
+                                                                     .name = "motor_data_update",
+                                                                     .stack_size = 2048,
+                                                                     .priority = osPriorityNormal,
+                                                                 });
 
   commandHandle = osThreadNew(command, NULL, &(osThreadAttr_t){
                                                        .name = "command",
-                                                       .stack_size = 1024,
+                                                       .stack_size = 4096,
                                                        .priority = osPriorityNormal,
                                                    });
 
-  showGM6020dataHandle = osThreadNew(showGM6020data, NULL, &(osThreadAttr_t){
-                                                       .name = "showGM6020data",
-                                                       .stack_size = 2500,
+  showGM6020dataHandle = osThreadNew(showmotordata, NULL, &(osThreadAttr_t){
+                                                       .name = "showmotordata",
+                                                       .stack_size = 4096,
                                                        .priority = osPriorityNormal,
                                                    });
 
-  locationpidcontrolHandle = osThreadNew(locationpidcontrol, NULL, &(osThreadAttr_t){
-                                                               .name = "positionpidcontrol",
-                                                               .stack_size = 1024,
-                                                               .priority = osPriorityNormal,
-                                                           });
-  /*speedpidcontrolHandle = osThreadNew(speedpidcontrol, NULL, &(osThreadAttr_t){
-                                                                       .name = "speedpidcontrol",
-                                                                       .stack_size = 1024,
-                                                                       .priority = osPriorityNormal,
-                                                                   });*/
+  chassis_status_updateHandle = osThreadNew(chassis_status_update, NULL, &(osThreadAttr_t){
+                                                        .name = "chassis_status_update",
+                                                        .stack_size = 16384,
+                                                        .priority = osPriorityNormal,
+                                                    });
 
+  dmimu_updateHandle = osThreadNew(dmimu_update, NULL, &(osThreadAttr_t){
+                                                           .name = "dmimu_update",
+                                                           .stack_size = 8192,
+                                                           .priority = osPriorityNormal,
+                                                       });
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -151,11 +156,15 @@ void MX_FREERTOS_Init(void) {
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void *argument)
 {
+  /* init code for USB_HOST */
+  MX_USB_HOST_Init();
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(10);
+    int buff = 1;
+    osMessageQueuePut(hUsbHostHS.os_event,&buff, 0, 10);
   }
   /* USER CODE END StartDefaultTask */
 }

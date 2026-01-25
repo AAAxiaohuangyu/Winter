@@ -2,7 +2,7 @@
 
 chassis_status_type chassis_status = {0};
 
-void transfer_near()
+void transfer_near(void)
 {
     uint8_t mode_flag = 2;
     chassis_status.chassis_angle_actual = (GM6020[0].angle + GM6020[1].angle + GM6020[2].angle + GM6020[3].angle) / 4.0f;
@@ -65,12 +65,12 @@ void transfer_near()
 
 float chassis_control_parameter = 10;
 
-void swerve()
+void swerve(void)
 {
     chassis_status.chassis_speed_actual = (GM6020[0].speed + GM6020[1].speed + GM6020[2].speed + GM6020[3].speed);
     chassis_status.chassis_angle_target_swerve = chassis_status.chassis_angle_actual;
 
-    chassis_status.chassis_speed_target_swerve = chassis_status.chassis_speed_target_near * fabs(cos(pi * (double)(chassis_status.chassis_angle_actual - chassis_status.chassis_angle_target_near) / 180));
+    chassis_status.chassis_speed_target_swerve = chassis_status.chassis_speed_target_near * (float)fabs(cos(pi * (double)(chassis_status.chassis_angle_actual - chassis_status.chassis_angle_target_near) / 180.0));
 
     if (chassis_status.chassis_speed_actual <= chassis_angle_swerve_speedmax && chassis_status.chassis_speed_actual >= -chassis_angle_swerve_speedmax)
     {
@@ -83,5 +83,24 @@ void swerve()
     else
     {
         chassis_status.chassis_angle_target_swerve += (1 - (log(chassis_status.chassis_speed_actual - chassis_angle_swerve_speedmax) / log(chassis_control_parameter))) * (chassis_status.chassis_angle_target - chassis_status.chassis_angle_actual);
+    }
+}
+
+void motor_status_allocate(void){
+    uint8_t i = 0;
+    for (i = 0; i < 3;i++){
+        GM6020_locationpid[i].target = chassis_status.chassis_angle_target_swerve;
+        M3508_speedpid[i].target = chassis_status.chassis_speed_target_swerve;
+    }
+    M3508_speedpidcontrol();
+    GM6020_locationpidcontrol();
+    osDelay(10);
+}
+
+void chassis_status_update(void *ptr){
+    while(1){
+        transfer_near();
+        swerve();
+        motor_status_allocate();
     }
 }

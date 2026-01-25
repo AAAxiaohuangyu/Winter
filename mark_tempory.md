@@ -20,3 +20,9 @@ id 1
 2. command:解算上位机命令
 3. showGM6020data:传给上位机GM6020信息
 4. pidcontrol:pid调控
+
+
+
+
+
+未完成:imu,esp32

@@ -1,44 +1,43 @@
 #include "usartuser.h"
 
-uint8_t usartrxdatabuff[64] = {0};
+uint8_t usart1rxdatabuff[64] = {0};
 uint8_t message_flag = 0;
 
 void command(void*ptr)
 {
     char tittle[6] = {0};
     char subtittle[5] = {0};
-    int txid;
     int txdata;
     while (1)
     {
         if (message_flag)
         {
-            if (strncmp((char *)usartrxdatabuff, "GM6020",6) == 0)
+            if (strncmp((char *)usart1rxdatabuff, "motor",5) == 0)
             {
-                sscanf((char *)usartrxdatabuff, "%s %s %d %d",tittle,subtittle, &txid, &txdata);
+                sscanf((char *)usart1rxdatabuff, "%s %s %d",tittle,subtittle,&txdata);
                 if (strncmp(subtittle, "speed", 5) == 0)
                 {
-                    if (txid >= 1 && txid <= 8)
-                    {
-                        speedpid[txid - 1].target = (float)txdata;
-                    }
+                    chassis_status.chassis_speed_target = (float)txdata;
                 }
                 else if (strncmp(subtittle, "location", 8) == 0)
                 {
-                    if (txid >= 1 && txid <= 8)
-                    {
-                        locationpid[txid - 1].target = (float)txdata;
-                    }
+                    chassis_status.chassis_angle_target = (float)txdata;
                 }
                 
             }
-            memset(usartrxdatabuff, 0, sizeof(usartrxdatabuff));
+
+            else if (strncmp((char *)usart1rxdatabuff, "dmimu_init", 10) == 0)
+            {
+                dmimu_init();
+            }
+
+            memset(usart1rxdatabuff, 0, sizeof(usart1rxdatabuff));
             message_flag = 0;
         }
     }
 }
 
-void showGM6020data(void*ptr)
+void showmotordata(void*ptr)
 {
     while (1)
     {
@@ -47,10 +46,10 @@ void showGM6020data(void*ptr)
         HAL_UART_Transmit_DMA(&huart1, (uint8_t *)txbuff, sizeof(txbuff));*/
 
         uint8_t package[channel * 4 + 4];
-        memcpy(&package[4 * 0], &locationpid[0].target, 4);
-        memcpy(&package[4 * 1], &locationpid[0].actual, 4);
-        memcpy(&package[4 * 2], &speedpid[0].target, 4);
-        memcpy(&package[4 * 3], &speedpid[0].actual, 4);
+        memcpy(&package[4 * 0], &GM6020_locationpid[0].target, 4);
+        memcpy(&package[4 * 1], &GM6020_locationpid[0].actual, 4);
+        memcpy(&package[4 * 2], &M3508_speedpid[0].target, 4);
+        memcpy(&package[4 * 3], &M3508_speedpid[0].actual, 4);
         package[channel * 4 + 0] = 0x00;
         package[channel * 4 + 1] = 0x00;
         package[channel * 4 + 2] = 0x80;
@@ -64,8 +63,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
     if (huart->Instance == USART1)
     {
-        usartrxdatabuff[Size] = '\0';
+        usart1rxdatabuff[Size] = '\0';
         message_flag = 1;
-        HAL_UARTEx_ReceiveToIdle_DMA(&huart1, usartrxdatabuff, 64);
+        HAL_UARTEx_ReceiveToIdle_DMA(&huart1, usart1rxdatabuff, 64);
     }
 }

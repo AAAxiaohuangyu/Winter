@@ -1,6 +1,6 @@
 gm6020\pid.o: ..\PID\pid.c
-gm6020\pid.o: ../PID/pid.h
-gm6020\pid.o: ../GM6020driver/GM6020driver.h
+gm6020\pid.o: ..\PID\pid.h
+gm6020\pid.o: ../motordriver/motordriver.h
 gm6020\pid.o: ../canuser/canuser.h
 gm6020\pid.o: ../Core/Inc/fdcan.h
 gm6020\pid.o: ../Core/Inc/main.h
@@ -41,4 +41,6 @@ gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
+gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hcd.h
+gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 gm6020\pid.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h

@@ -1,3 +1,6 @@
+#ifndef ChassisControl_h
+#define ChassisControl_h
+
 #include "pid.h"
 #include "math.h"
 
@@ -17,3 +20,10 @@ typedef struct{
 #define pi 3.1415926535
 
 extern chassis_status_type chassis_status;
+
+void transfer_near(void);
+void swerve(void);
+void motor_status_allocate(void);
+void chassis_status_update(void *ptr);
+
+#endif
