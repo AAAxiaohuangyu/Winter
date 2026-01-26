@@ -15,9 +15,12 @@ typedef struct{
     float chassis_speed_target_swerve;
 }chassis_status_type;
 
+#define proportion 0.1f
+#define chassis_control_parameter 5000.0f
 #define chassis_angle_swerve_speedmax 1.0f
 #define chassis_angle_swerve_anglemax 4.5f
 #define pi 3.1415926535
+#define speed_trans_constant 0.000284947965 // 速度单位转换常量,转换到m/s
 
 extern chassis_status_type chassis_status;
 

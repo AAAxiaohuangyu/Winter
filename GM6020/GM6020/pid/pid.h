@@ -13,7 +13,6 @@ typedef struct{
     float actual;
     float error0;
     float error1;
-    float error2;
     float error_sum;
     float output;
 }pidtype;

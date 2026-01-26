@@ -51,33 +51,36 @@ void dmimu_update(void *ptr)
 {
     while (1)
     {
-        uint8_t rxbuff[114] = {0};
-        uint8_t i = 0;
-        USBH_CDC_Receive(&hUsbHostHS, rxbuff, sizeof(rxbuff));
-        for (i = 0; i < 115; i++)
+        if (hUsbHostHS.EnumState == ENUM_IDLE && hUsbHostHS.gState == HOST_CLASS)
         {
-            if (rxbuff[i] == 0x55 && rxbuff[i + 1] == 0xAA && rxbuff[i + 2] == 0 && rxbuff[i + 3] >= 0x01 && rxbuff[i + 3] <= 0x04 && rxbuff[i + 18] == 0x0A && Get_CRC16(&rxbuff[i], 16) == ((rxbuff[17] << 8) | rxbuff[16]))
+            uint8_t rxbuff[114] = {0};
+            uint8_t i = 0;
+            USBH_CDC_Receive(&hUsbHostHS, rxbuff, sizeof(rxbuff));
+            for (i = 0; i < 115; i++)
             {
-                if (rxbuff[i + 3] == 0x01)
+                if (rxbuff[i] == 0x55 && rxbuff[i + 1] == 0xAA && rxbuff[i + 2] == 0 && rxbuff[i + 3] >= 0x01 && rxbuff[i + 3] <= 0x04 && rxbuff[i + 18] == 0x0A && Get_CRC16(&rxbuff[i], 16) == ((rxbuff[17] << 8) | rxbuff[16]))
                 {
-                    memcpy(&dmimu_data.acceleration_x, &rxbuff[i + 4], 4);
-                    memcpy(&dmimu_data.acceleration_y, &rxbuff[i + 8], 4);
-                    memcpy(&dmimu_data.acceleration_z, &rxbuff[i + 12], 4);
-                }
-                else if (rxbuff[i + 3] == 0x02)
-                {
-                    memcpy(&dmimu_data.angular_velocity_x, &rxbuff[i + 4], 4);
-                    memcpy(&dmimu_data.angular_velocity_y, &rxbuff[i + 8], 4);
-                    memcpy(&dmimu_data.angular_velocity_z, &rxbuff[i + 12], 4);
-                }
-                else if (rxbuff[i + 3] == 0x03)
-                {
-                    memcpy(&dmimu_data.roll, &rxbuff[i + 4], 4);
-                    memcpy(&dmimu_data.pitch, &rxbuff[i + 8], 4);
-                    memcpy(&dmimu_data.yaw, &rxbuff[i + 12], 4);
-                }
+                    if (rxbuff[i + 3] == 0x01)
+                    {
+                        memcpy(&dmimu_data.acceleration_x, &rxbuff[i + 4], 4);
+                        memcpy(&dmimu_data.acceleration_y, &rxbuff[i + 8], 4);
+                        memcpy(&dmimu_data.acceleration_z, &rxbuff[i + 12], 4);
+                    }
+                    else if (rxbuff[i + 3] == 0x02)
+                    {
+                        memcpy(&dmimu_data.angular_velocity_x, &rxbuff[i + 4], 4);
+                        memcpy(&dmimu_data.angular_velocity_y, &rxbuff[i + 8], 4);
+                        memcpy(&dmimu_data.angular_velocity_z, &rxbuff[i + 12], 4);
+                    }
+                    else if (rxbuff[i + 3] == 0x03)
+                    {
+                        memcpy(&dmimu_data.roll, &rxbuff[i + 4], 4);
+                        memcpy(&dmimu_data.pitch, &rxbuff[i + 8], 4);
+                        memcpy(&dmimu_data.yaw, &rxbuff[i + 12], 4);
+                    }
 
-                i += 19;
+                    i += 19;
+                }
             }
         }
         osDelay(50);

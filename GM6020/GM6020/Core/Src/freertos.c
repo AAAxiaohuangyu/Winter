@@ -164,7 +164,7 @@ void StartDefaultTask(void *argument)
   {
     osDelay(10);
     int buff = 1;
-    osMessageQueuePut(hUsbHostHS.os_event,&buff, 0, 10);
+    osMessageQueuePut(hUsbHostHS.os_event, &buff, 0, 10);
   }
   /* USER CODE END StartDefaultTask */
 }
