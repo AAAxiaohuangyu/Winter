@@ -15,14 +15,16 @@ typedef struct{
     float chassis_speed_target_swerve;
 }chassis_status_type;
 
-#define proportion 0.1f
-#define chassis_control_parameter 5000.0f
-#define chassis_angle_swerve_speedmax 1.0f
-#define chassis_angle_swerve_anglemax 4.5f
+#define proportion 0.01f
+#define chassis_angle_swerve_speedmax 0.2f
+#define chassis_angle_swerve_anglemax 1.5f
 #define pi 3.1415926535
 #define speed_trans_constant 0.000284947965 // 速度单位转换常量,转换到m/s
+#define speed_parameter 50000.0f
 
 extern chassis_status_type chassis_status;
+extern uint8_t transfer_near_completed_flag;
+extern uint8_t pid_mode_flag; //0:快速转向,1:慢速转向,2:保持角度
 
 void transfer_near(void);
 void swerve(void);

@@ -29,6 +29,8 @@
 #include "usartuser.h"
 #include "tim.h"
 #include "dmimudriver.h"
+#include "iicuser.h"
+#include "esp8266driver.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -85,8 +87,11 @@ void MX_FREERTOS_Init(void) {
   HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
   HAL_FDCAN_Start(&hfdcan1);
   HAL_UARTEx_ReceiveToIdle_DMA(&huart1, usart1rxdatabuff, 64);
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart3, usart3rxdatabuff, 64);
   pidinit();
   HAL_TIM_Base_Start_IT(&htim2);
+  HAL_I2C_EnableListen_IT(&hi2c1);
+  esp8266_init();
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -130,7 +135,7 @@ void MX_FREERTOS_Init(void) {
 
   chassis_status_updateHandle = osThreadNew(chassis_status_update, NULL, &(osThreadAttr_t){
                                                         .name = "chassis_status_update",
-                                                        .stack_size = 16384,
+                                                        .stack_size = 20480,
                                                         .priority = osPriorityNormal,
                                                     });
 

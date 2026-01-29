@@ -55,6 +55,7 @@ gm6020\freertos.o: ../PID/pid.h
 gm6020\freertos.o: ../motordriver/motordriver.h
 gm6020\freertos.o: ../canuser/canuser.h
 gm6020\freertos.o: ../Core/Inc/fdcan.h
+gm6020\freertos.o: ../ChassisControl/ChassisControl.h
 gm6020\freertos.o: ../usartuser/usartuser.h
 gm6020\freertos.o: ../Core/Inc/usart.h
 gm6020\freertos.o: F:\Keil5\ARM\ARMCC\Bin\..\include\string.h
@@ -71,3 +72,8 @@ gm6020\freertos.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h
 gm6020\freertos.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_pipes.h
 gm6020\freertos.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ctlreq.h
 gm6020\freertos.o: ../Core/Inc/tim.h
+gm6020\freertos.o: ../iicuser/iicuser.h
+gm6020\freertos.o: ../Core/Inc/i2c.h
+gm6020\freertos.o: ../odometer/odometer.h
+gm6020\freertos.o: ../esp8266driver/esp8266driver.h
+gm6020\freertos.o: ../usartuser/usartuser.h

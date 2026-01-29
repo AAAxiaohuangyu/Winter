@@ -44,3 +44,5 @@ gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hcd.h
 gm6020\pid.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 gm6020\pid.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
+gm6020\pid.o: ../ChassisControl/ChassisControl.h
+gm6020\pid.o: ../PID/pid.h

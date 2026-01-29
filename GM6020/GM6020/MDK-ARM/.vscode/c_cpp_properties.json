@@ -22,6 +22,8 @@
                 "g:\\111\\GM6020\\GM6020\\Middlewares\\ST\\STM32_USB_Host_Library\\Core\\Inc",
                 "g:\\111\\GM6020\\GM6020\\Middlewares\\ST\\STM32_USB_Host_Library\\Class\\CDC\\Inc",
                 "g:\\111\\GM6020\\GM6020\\dmimudriver",
+                "g:\\111\\GM6020\\GM6020\\iicuser",
+                "g:\\111\\GM6020\\GM6020\\esp8266driver",
                 "F:\\Keil5\\ARM\\ARMCC\\include",
                 "F:\\Keil5\\ARM\\ARMCC\\include\\rw",
                 "g:\\111\\GM6020\\GM6020\\MDK-ARM",

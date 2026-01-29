@@ -49,6 +49,7 @@ gm6020\usartuser.o: ../canuser/canuser.h
 gm6020\usartuser.o: ../Core/Inc/fdcan.h
 gm6020\usartuser.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 gm6020\usartuser.o: ../ChassisControl/ChassisControl.h
+gm6020\usartuser.o: ../PID/pid.h
 gm6020\usartuser.o: ../dmimudriver/dmimudriver.h
 gm6020\usartuser.o: ../USB_HOST/App/usb_host.h
 gm6020\usartuser.o: ../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc/usbh_cdc.h

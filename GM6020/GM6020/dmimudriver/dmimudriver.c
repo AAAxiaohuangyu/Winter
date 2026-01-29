@@ -26,11 +26,11 @@ void dmimu_init(void)
     USBH_CDC_Transmit(&hUsbHostHS, command_buff, sizeof(command_buff));
     osDelay(20);
     command_buff[1] = 0x01;
-    command_buff[2] = 0x16;
+    command_buff[2] = 0x17;
     USBH_CDC_Transmit(&hUsbHostHS, command_buff, sizeof(command_buff));
     osDelay(20);
     command_buff[1] = 0x01;
-    command_buff[2] = 0x07;
+    command_buff[2] = 0x06;
     USBH_CDC_Transmit(&hUsbHostHS, command_buff, sizeof(command_buff));
     osDelay(20);
     command_buff[1] = 0x03;
@@ -53,12 +53,12 @@ void dmimu_update(void *ptr)
     {
         if (hUsbHostHS.EnumState == ENUM_IDLE && hUsbHostHS.gState == HOST_CLASS)
         {
-            uint8_t rxbuff[114] = {0};
+            uint8_t rxbuff[122] = {0};
             uint8_t i = 0;
             USBH_CDC_Receive(&hUsbHostHS, rxbuff, sizeof(rxbuff));
-            for (i = 0; i < 115; i++)
+            for (i = 0; i < 122; i++)
             {
-                if (rxbuff[i] == 0x55 && rxbuff[i + 1] == 0xAA && rxbuff[i + 2] == 0 && rxbuff[i + 3] >= 0x01 && rxbuff[i + 3] <= 0x04 && rxbuff[i + 18] == 0x0A && Get_CRC16(&rxbuff[i], 16) == ((rxbuff[17] << 8) | rxbuff[16]))
+                if (i <= 103 &&rxbuff[i] == 0x55 && rxbuff[i + 1] == 0xAA && rxbuff[i + 2] == 0 && rxbuff[i + 3] >= 0x01 && rxbuff[i + 3] <= 0x02 && rxbuff[i + 18] == 0x0A && Get_CRC16(&rxbuff[i], 16) == ((rxbuff[i + 17] << 8) | rxbuff[i + 16]))
                 {
                     if (rxbuff[i + 3] == 0x01)
                     {
@@ -72,14 +72,16 @@ void dmimu_update(void *ptr)
                         memcpy(&dmimu_data.angular_velocity_y, &rxbuff[i + 8], 4);
                         memcpy(&dmimu_data.angular_velocity_z, &rxbuff[i + 12], 4);
                     }
-                    else if (rxbuff[i + 3] == 0x03)
-                    {
-                        memcpy(&dmimu_data.roll, &rxbuff[i + 4], 4);
-                        memcpy(&dmimu_data.pitch, &rxbuff[i + 8], 4);
-                        memcpy(&dmimu_data.yaw, &rxbuff[i + 12], 4);
-                    }
 
                     i += 19;
+                }
+                else if (i <=99 && rxbuff[i] == 0x55 && rxbuff[i + 1] == 0xAA && rxbuff[i + 2] == 0 && rxbuff[i + 3] == 0x04 && rxbuff[i + 22] == 0x0A && Get_CRC16(&rxbuff[i], 20) == ((rxbuff[i + 21] << 8) | rxbuff[i + 20])){
+                    memcpy(&dmimu_data.quaternion_w, &rxbuff[i + 4], 4);
+                    memcpy(&dmimu_data.quaternion_x, &rxbuff[i + 8], 4);
+                    memcpy(&dmimu_data.quaternion_y, &rxbuff[i + 12], 4);
+                    memcpy(&dmimu_data.quaternion_z, &rxbuff[i + 16], 4);
+
+                    i += 23;
                 }
             }
         }

@@ -5,23 +5,24 @@ uint8_t message_flag = 0;
 
 void command(void*ptr)
 {
-    char tittle[6] = {0};
+    char tittle[5] = {0};
     char subtittle[5] = {0};
-    int txdata;
+    char tritittle[8] = {0};
+    int txdata1;
+    int txdata2;
     while (1)
     {
         if (message_flag)
         {
             if (strncmp((char *)usart1rxdatabuff, "motor",5) == 0)
             {
-                sscanf((char *)usart1rxdatabuff, "%s %s %d",tittle,subtittle,&txdata);
-                if (strncmp(subtittle, "speed", 5) == 0)
+                sscanf((char *)usart1rxdatabuff, "%s %s %d %s %d", tittle, subtittle, &txdata1, tritittle, &txdata2);
+                if (strncmp(subtittle, "speed", 5) == 0 && strncmp(tritittle, "location", 8) == 0)
                 {
-                    chassis_status.chassis_speed_target = (float)txdata;
-                }
-                else if (strncmp(subtittle, "location", 8) == 0)
-                {
-                    chassis_status.chassis_angle_target = (float)txdata;
+                    pid_mode_flag = 1;
+                    chassis_status.chassis_speed_target = (float)txdata1;
+                    chassis_status.chassis_angle_target = (float)txdata2;
+                    transfer_near_completed_flag = 1;
                 }
                 
             }
@@ -46,8 +47,8 @@ void showmotordata(void*ptr)
         HAL_UART_Transmit_DMA(&huart1, (uint8_t *)txbuff, sizeof(txbuff));*/
 
         uint8_t package[channel * 4 + 4];
-        memcpy(&package[4 * 0], &GM6020_locationpid[0].target, 4);
-        memcpy(&package[4 * 1], &GM6020_locationpid[0].actual, 4);
+        memcpy(&package[4 * 0], &chassis_status.chassis_angle_target, 4);
+        memcpy(&package[4 * 1], &chassis_status.chassis_angle_actual, 4);
         memcpy(&package[4 * 2], &M3508_speedpid[0].target, 4);
         memcpy(&package[4 * 3], &M3508_speedpid[0].actual, 4);
         package[channel * 4 + 0] = 0x00;
@@ -59,12 +60,3 @@ void showmotordata(void*ptr)
     }
 }
 
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-{
-    if (huart->Instance == USART1)
-    {
-        usart1rxdatabuff[Size] = '\0';
-        message_flag = 1;
-        HAL_UARTEx_ReceiveToIdle_DMA(&huart1, usart1rxdatabuff, 64);
-    }
-}

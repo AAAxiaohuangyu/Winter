@@ -52,6 +52,7 @@ gm6020\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 gm6020\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 gm6020\main.o: ../Core/Inc/dma.h
 gm6020\main.o: ../Core/Inc/fdcan.h
+gm6020\main.o: ../Core/Inc/i2c.h
 gm6020\main.o: ../Core/Inc/tim.h
 gm6020\main.o: ../Core/Inc/usart.h
 gm6020\main.o: ../USB_HOST/App/usb_host.h
